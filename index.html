@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll 34</title>
+
+    <link rel="shortcut icon" href="https://rule34.xxx/favicon.ico?v=2">
+
+    <style>
+        * {
+            margin: 0px;
+            overflow: hidden;
+            font-family: verdana,sans-serif;
+        }
+
+        p {
+            font-family: verdana,sans-serif;
+            font-size: 80%; 
+        }
+
+        .searchShit {
+            width: max-content;
+            margin: auto;
+
+            height: 75vh;
+            overflow: auto;
+        }
+
+        .search {
+            width: 220px;
+        }
+    </style>
+</head>
+<body style="margin: 0px; background-color: #aae5a4; text-align: center; height: 100vh;">
+    <div class="searchShit">
+        <p style="margin-bottom: 1em;">
+            <img src="https://rule34.xxx/images/header2.png">
+        </p>
+        <p style="margin-bottom: 1em;">Rule 34 : If it exists there is porn of it. If not, start uploading.</p>
+        <div class="links">
+            <a href="https://rule34.xxx/" style="text-decoration: none; font-size: 80%; margin: 0 0.5em;">Rule34.xxx</a>
+            <a href="https://github.com/Gronk427/Scroll-34" style="text-decoration: none; font-size: 80%; margin: 0 0.5em;">Source Code</a>
+        </div>
+        <input class="search" type="text"><br><button onclick="clearInterval(loopInt); loading = false; loop = 0; marge = 0; loopInt = setInterval(looporn, 10); search = document.querySelector('.search').value; document.title = 'Scroll 34 / ' + document.querySelector('.search').value; document.querySelector('.porn').innerHTML = ''">Search</button>
+        <br><br>
+        <p style="">Click the images to enlarge!</p>
+    </div>
+    <div class="porn" style="height: 25vh; width: max-content; margin: auto;" onclick="if (this.style.height != '100vh'){this.style.height = '100vh'}else{this.style.height = '50vh'}"></div>
+
+    <script>
+        let search = ""
+        let loopInt = ""
+
+        async function pornTime(page, tags){
+            loading = true
+            fetch(`https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&tags=${tags}&pid=${page}&limit=42`).then(async (rule34) => {
+                let pornZone = document.querySelector(".porn")
+                
+                let newRule34 = ""
+                try {
+                    newRule34 = await rule34.json()
+                } catch {
+                    document.querySelector('.searchShit').style.display = 'block'
+                    pornZone.style.height = '25vh'
+                    pornZone.innerHTML = "<p><h1>No results! :(</h1></p>"
+                    clearInterval(loopInt)
+                    return
+                }
+
+                for (let x = 0; x < newRule34.length; x++){
+                    if (newRule34[x].file_url.endsWith(".mp4")){continue}
+                    let temp = document.createElement("img")
+                    temp.className = "r34img"
+                    temp.src = newRule34[x].file_url
+
+                    temp.style.height = "100%"
+                    pornZone.appendChild(temp)
+                }
+
+                loading = false
+            })
+        }
+
+        function looporn(){
+            let pornZone = document.querySelector(".porn")
+
+            if (pornZone.style.height != '100vh'){
+                pornZone.style.marginLeft = `${marge/2}px`
+                document.querySelector('.searchShit').style.display = 'block'
+            } else {
+                pornZone.style.marginLeft = `${marge}px`
+                document.querySelector('.searchShit').style.display = 'none'
+            }
+            marge -= 1
+
+            if (pornZone.getBoundingClientRect().right <= 1920 && !loading){
+                pornTime(loop, search)
+                loop++
+            }
+        }
+        let loop = 0
+        let marge = 0
+        let loading = false
+    </script>
+</body>
+</html>
