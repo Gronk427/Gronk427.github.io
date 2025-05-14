@@ -42,24 +42,65 @@
             <a href="https://rule34.xxx/" style="text-decoration: none; font-size: 80%; margin: 0 0.5em;">Rule34.xxx</a>
             <a href="https://github.com/Gronk427/Scroll-34" style="text-decoration: none; font-size: 80%; margin: 0 0.5em;">Source Code</a>
         </div>
-        <input class="search" type="text"><br><button onclick="clearInterval(loopInt); loading = false; loop = 0; marge = 0; loopInt = setInterval(looporn, 10); search = document.querySelector('.search').value; document.title = 'Scroll 34 / ' + document.querySelector('.search').value; document.querySelector('.porn').innerHTML = ''">Search</button>
-        <br><br>
-        <p style="">Click the images to enlarge!</p>
+        <input class="search" type="text"><br><button onclick="
+            clearInterval(loopInt)
+            loading = false
+            loop = 0
+            marge = 0
+            speed = document.querySelector('.speedSelect').value
+            tick = Date.now()
+            loopInt = setInterval(looporn, 100)
+            search = document.querySelector('.search').value
+            document.title = 'Scroll 34 / ' + document.querySelector('.search').value
+            document.querySelector('.porn').innerHTML = ''
+            document.querySelector('.pornhq').innerHTML = ''
+        ">Search</button><button onclick="window.open(window.location.href + '?tags=' + search.replaceAll(' ', '+') + '&speed=' + speed, '_blank').focus()">Open In New Tab</button>
+        <br style="margin-bottom: 8px;">
+        <input class="speedSelect" type="range" min="25" max="1000" step="25" value="50"><br>
+        <p>Scroll Speed: <b class="speedDisp">50</b>px/s</p>
     </div>
-    <div class="porn" style="height: 25vh; width: max-content; margin: auto;" onclick="if (this.style.height != '100vh'){this.style.height = '100vh'}else{this.style.height = '25vh'}"></div>
+    <div class="porn" style="height: 25vh; width: max-content; margin: auto; position: absolute; transition: left 0.2s linear; bottom: 0px; z-index: 0;"></div>
+    <div class="pornhq" style="height: 25vh; width: max-content; margin: auto; position: absolute; transition: left 0.2s linear; bottom: 0px; z-index: 1;"></div>
 
     <script>
-        let search = ""
+        let params = new URL(document.location).searchParams
+        let search = "-ai_generated"
         let loopInt = ""
+        let speed = document.querySelector(".speedSelect").value
+        let loop = 0
+        let marge = 0
+        let loading = false
+        let tick = Date.now()
+
+        if (params.get("tags") != null){
+            search = params.get("tags")
+            document.querySelector('.searchShit').style.display = 'none'
+            document.querySelector('.porn').style.height = "100vh"
+            document.querySelector('.pornhq').style.height = "100vh"
+            document.title = 'Scroll 34 / ' + search
+        }
+
+        loopInt = setInterval(looporn, 100)
+
+        if (params.get("speed") != null){
+            speed = params.get("speed")
+        }
 
         async function pornTime(page, tags){
             loading = true
             fetch(`https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&tags=${tags}&pid=${page}&limit=42`).then(async (rule34) => {
+                console.log(rule34)
+                
                 let pornZone = document.querySelector(".porn")
+                let pornZoneHQ = document.querySelector(".pornhq")
+                let load = [0, 0]
                 
                 let newRule34 = ""
                 try {
                     newRule34 = await rule34.json()
+                    if (newRule34.length == 0){
+                        loop = 0
+                    }
                 } catch {
                     document.querySelector('.searchShit').style.display = 'block'
                     pornZone.style.height = '25vh'
@@ -72,36 +113,77 @@
                     if (newRule34[x].file_url.endsWith(".mp4")){continue}
                     let temp = document.createElement("img")
                     temp.className = "r34img"
-                    temp.src = newRule34[x].file_url
+                    temp.src = newRule34[x].sample_url
+
+                    temp.onclick = ()=>{
+                        window.open('https://rule34.xxx/index.php?page=post&s=view&id=' + newRule34[x].id, '_blank').focus()
+                    }
+
+                    load[0]++
+
+                    temp.onload = ()=>{
+                        load[1]++
+                    }
+
+                    temp.onerror = ()=>{
+                        load[0]--
+                    }
 
                     temp.style.height = "100%"
                     pornZone.appendChild(temp)
+
+                    let tempHQ = document.createElement("img")
+                    tempHQ.className = "r34img"
+                    tempHQ.src = newRule34[x].file_url
+
+                    tempHQ.onclick = ()=>{
+                        window.open('https://rule34.xxx/index.php?page=post&s=view&id=' + newRule34[x].id, '_blank').focus()
+                    }
+
+                    tempHQ.style.opacity = "0"
+
+                    tempHQ.onload = ()=>{
+                        tempHQ.style.opacity = "1"
+                    }
+                    tempHQ.style.height = "100%"
+                    pornZoneHQ.appendChild(tempHQ)
                 }
 
-                loading = false
+                setTimeout(()=>{loading = false}, 5000)
             })
         }
 
         function looporn(){
+            let d = (Date.now()-tick)/1000
+            tick = Date.now()
+
             let pornZone = document.querySelector(".porn")
+            let pornZoneHQ = document.querySelector(".pornhq")
+
+            document.querySelector(".speedDisp").textContent = document.querySelector(".speedSelect").value
+
+            if (pornZone.getBoundingClientRect().right <= screen.width*2){
+                if (!loading){
+                    pornTime(loop, search)
+                    loop++
+                }
+                return
+            }
+
+            if (d > 1){
+                return
+            }
+
+            marge -= speed*d
 
             if (pornZone.style.height != '100vh'){
-                pornZone.style.marginLeft = `${marge/2}px`
-                document.querySelector('.searchShit').style.display = 'block'
+                pornZone.style.left = `${marge/4}px`
+                pornZoneHQ.style.left = `${marge/4}px`
             } else {
-                pornZone.style.marginLeft = `${marge}px`
-                document.querySelector('.searchShit').style.display = 'none'
-            }
-            marge -= 1
-
-            if (pornZone.getBoundingClientRect().right <= 1920 && !loading){
-                pornTime(loop, search)
-                loop++
+                pornZone.style.left = `${marge}px`
+                pornZoneHQ.style.left = `${marge}px`
             }
         }
-        let loop = 0
-        let marge = 0
-        let loading = false
     </script>
 </body>
 </html>
