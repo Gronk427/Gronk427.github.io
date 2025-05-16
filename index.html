@@ -42,20 +42,28 @@
             <a href="https://rule34.xxx/" style="text-decoration: none; font-size: 80%; margin: 0 0.5em;">Rule34.xxx</a>
             <a href="https://github.com/Gronk427/Scroll-34" style="text-decoration: none; font-size: 80%; margin: 0 0.5em;">Source Code</a>
         </div>
-        <input class="search" type="text"><br><button onclick="
-            clearInterval(loopInt)
-            loading = false
-            loop = 0
-            marge = 0
-            speed = document.querySelector('.speedSelect').value
-            tick = Date.now()
-            loopInt = setInterval(looporn, 100)
-            search = document.querySelector('.search').value
-            document.title = 'Scroll 34 / ' + document.querySelector('.search').value
-            document.querySelector('.porn').innerHTML = ''
-            document.querySelector('.pornhq').innerHTML = ''
-        ">Search</button><button onclick="window.open(window.location.href + '?tags=' + search.replaceAll(' ', '+') + '&speed=' + speed, '_blank').focus()">Open In New Tab</button>
-        <br style="margin-bottom: 8px;">
+        <input class="search" type="text">
+        <div style="display: flex; width: max-content; margin: auto;">
+            <button onclick="
+                clearInterval(loopInt)
+                loading = false
+                loop = 0
+                marge = 0
+                speed = document.querySelector('.speedSelect').value
+                tick = Date.now()
+                loopInt = setInterval(looporn, 100)
+                search = document.querySelector('.search').value
+                document.title = 'Scroll 34 / ' + document.querySelector('.search').value
+                if (document.querySelector('.aiposts').checked){search += '+-ai_generated+-ai_assisted+-ai+-ai_upscaled+-ai_generated_background+-ai-created+-ai-generated'}
+                document.querySelector('.porn').innerHTML = ''
+                document.querySelector('.pornhq').innerHTML = ''
+            ">Search</button>
+            <button onclick="
+                window.open(window.location.href + '?tags=' + search.replaceAll(' ', '+') + '&speed=' + speed, '_blank').focus()">Fullscreen</button>
+            <b style="font-size: 80%; margin-top: 2px; margin-left: 4px;">Filter AI posts</b>
+            <input class="aiposts" type="checkbox" checked style="width: 16px; height: 16px; margin-top: 2px; margin-left: 4px;">
+        </div>
+        <br>
         <input class="speedSelect" type="range" min="25" max="1000" step="25" value="50"><br>
         <p>Scroll Speed: <b class="speedDisp">50</b>px/s</p>
     </div>
@@ -64,7 +72,7 @@
 
     <script>
         let params = new URL(document.location).searchParams
-        let search = "-ai_generated"
+        let search = ""
         let loopInt = ""
         let speed = document.querySelector(".speedSelect").value
         let loop = 0
@@ -80,6 +88,10 @@
             document.title = 'Scroll 34 / ' + search
         }
 
+        if (document.querySelector(".aiposts").checked){
+            search += "+-ai_generated+-ai_assisted+-ai+-ai_upscaled+-ai_generated_background+-ai-created+-ai-generated"
+        }
+
         loopInt = setInterval(looporn, 100)
 
         if (params.get("speed") != null){
@@ -89,8 +101,6 @@
         async function pornTime(page, tags){
             loading = true
             fetch(`https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&tags=${tags}&pid=${page}&limit=42`).then(async (rule34) => {
-                console.log(rule34)
-                
                 let pornZone = document.querySelector(".porn")
                 let pornZoneHQ = document.querySelector(".pornhq")
                 let load = [0, 0]
@@ -104,7 +114,13 @@
                 } catch {
                     document.querySelector('.searchShit').style.display = 'block'
                     pornZone.style.height = '25vh'
-                    pornZone.innerHTML = "<p><h1>No results! :(</h1></p>"
+                    pornZone.innerHTML = "<p style='width: 100vw'><h1 style='width: max-content; margin: auto'>Nobody here but us chickens!</h1></p>"
+                    pornZoneHQ.style.height = '25vh'
+                    pornZoneHQ.innerHTML = ""
+
+                    pornZone.style.left = `0px`
+                    pornZoneHQ.style.left = `0px`
+
                     clearInterval(loopInt)
                     return
                 }
@@ -161,12 +177,18 @@
             let pornZoneHQ = document.querySelector(".pornhq")
 
             document.querySelector(".speedDisp").textContent = document.querySelector(".speedSelect").value
+            if (pornZone.style.height != '100vh'){
+                speed = document.querySelector(".speedSelect").value
+            }
 
             if (pornZone.getBoundingClientRect().right <= screen.width*2){
                 if (!loading){
                     pornTime(loop, search)
                     loop++
                 }
+            }
+
+            if (pornZone.getBoundingClientRect().right <= screen.width+(speed/1000)){
                 return
             }
 
@@ -177,8 +199,8 @@
             marge -= speed*d
 
             if (pornZone.style.height != '100vh'){
-                pornZone.style.left = `${marge/4}px`
-                pornZoneHQ.style.left = `${marge/4}px`
+                pornZone.style.left = `${marge}px`
+                pornZoneHQ.style.left = `${marge}px`
             } else {
                 pornZone.style.left = `${marge}px`
                 pornZoneHQ.style.left = `${marge}px`
