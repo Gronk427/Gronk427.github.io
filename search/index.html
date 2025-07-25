@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alt 34: Search</title>
+
+    <link rel="shortcut icon" href="https://rule34.xxx/favicon.ico?v=2">
+
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div style="height: 128px; background-color: #93c393;">
+        <br><br>
+        <h1>Alt 34</h1>
+        <p><i>v1.0</i></p>
+        <div class="links">
+            <a href="https://rule34.xxx/" style="text-decoration: none; font-size: 80%; margin: 0 0.5em;">Rule34.xxx</a>
+            <a href="../index.html" style="text-decoration: none; font-size: 80%; margin: 0 0.5em;">Scroll 34</a>
+            <a href="https://github.com/Gronk427/Scroll-34" style="text-decoration: none; font-size: 80%; margin: 0 0.5em;">Source Code</a>
+        </div>
+    </div>
+    <div style="display: flex;">
+        <div style="height: 100%; width: 240px; padding-top: 8px;">
+            <div style="width: 240px;"></div>
+            <input class="search" type="text">
+            <button onclick="searchPosts()">Search</button>
+            <br><br>
+            <div style="display: flex; width: max-content; margin: auto;">
+                <button onclick="if (page!=0){page--; searchPosts()}"><</button>
+                <p style="padding: 4px;">Page <b class="pageNo">1</b></p>
+                <button onclick="page++; searchPosts()">></button>
+            </div>
+            <br>
+            <div>
+                <b style="font-size: 80%; margin-top: 2px; margin-left: 4px;">Filter AI posts</b>
+                <input class="aiposts" type="checkbox" checked style="width: 16px; height: 16px; margin-top: 2px; margin-left: 4px;">
+            </div>
+            <br>
+            <p>Thumbnail Size</p>
+            <div class="thumbsizezone">
+                <input class="thumbsize" type="range" min="64" max="256" step="16" value="256" onclick="document.querySelector('.thumbsizeDisp').innerHTML = this.value"><br>
+                <p>Post thumbnail size: <b class="thumbsizeDisp">1</b>px</p>
+            </div>
+        </div>
+        <div class="porn" style="display: flex; flex-wrap: wrap;"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

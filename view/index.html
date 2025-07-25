@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rule 34 Bypass: View</title>
+
+    <link rel="shortcut icon" href="https://rule34.xxx/favicon.ico?v=2">
+
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div style="height: 128px; background-color: #93c393;">
+        <br><br>
+        <h1>Alt 34</h1>
+        <p><i>v1.0</i></p>
+        <div class="links">
+            <a href="https://rule34.xxx/" style="text-decoration: none; font-size: 80%; margin: 0 0.5em;">Rule34.xxx</a>
+            <a href="../index.html" style="text-decoration: none; font-size: 80%; margin: 0 0.5em;">Scroll 34</a>
+            <a href="https://github.com/Gronk427/Scroll-34" style="text-decoration: none; font-size: 80%; margin: 0 0.5em;">Source Code</a>
+        </div>
+    </div>
+    <div style="display: flex;">
+        <div style="height: 100%; width: 240px; padding-top: 8px;">
+            <div style="width: 240px;"></div>
+            <input class="search" type="text">
+            <button onclick="window.open('../search/index.html?tags=' + document.querySelector('.search').value, '_blank').focus()">Search</button>
+            <br>
+            <div>
+                <b style="font-size: 80%; margin-top: 2px; margin-left: 4px;">Filter AI posts</b>
+                <input class="aiposts" type="checkbox" checked style="width: 16px; height: 16px; margin-top: 2px; margin-left: 4px;">
+            </div>
+            <div>
+                <b style="font-size: 80%; margin-top: 2px; margin-left: 4px;">Full quality image</b>
+                <input class="hqposts" type="checkbox" style="width: 16px; height: 16px; margin-top: 2px; margin-left: 4px;" onclick="pornTime(0, search)">
+            </div>
+            <br>
+            <div class="tags" style="text-align: left; padding-left: 4px;">
+                <p>Tags:</p>
+            </div>
+        </div>
+        <div class="porn" style="width: max-content; padding-top: 4px;"></div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
