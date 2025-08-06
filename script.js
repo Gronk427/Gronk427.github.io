@@ -94,7 +94,7 @@ async function pornTime(page, tags){
             tempHQ.src = newRule34[x].file_url
 
             tempHQ.onclick = ()=>{
-                window.open('https://rule34.xxx/index.php?page=post&s=view&id=' + newRule34[x].id, '_blank').focus()
+                window.open('view/index.html?id=' + newRule34[x].id, '_blank').focus()
             }
 
             tempHQ.style.height = "100%"
@@ -114,28 +114,6 @@ function looporn(){
     let pornZone = document.querySelector(".porn")
     let pornZoneHQ = document.querySelector(".pornhq")
 
-    // if (id[1] < id[0]-1){
-    //     if (document.querySelector(".r34hq" + id[1]).src.endsWith(".mp4")){
-    //         if (document.querySelector(".r34hq" + id[1]).getBoundingClientRect().right < 0){
-    //             document.querySelector(".r34hq" + id[1]).pause()
-    //             id[1]++
-    //         }
-    //     } else {
-    //         id[1]++
-    //     }
-    // }
-
-    // if (id[2] < id[0]-1){
-    //     if (document.querySelector(".r34hq" + id[2]).src.endsWith(".mp4")){
-    //         if (document.querySelector(".r34hq" + id[2]).getBoundingClientRect().left < screen.width){
-    //             document.querySelector(".r34hq" + id[2]).play()
-    //             id[2]++
-    //         }
-    //     } else {
-    //         id[2]++
-    //     }
-    // }
-
     document.querySelector(".posts").textContent = id[0]
     document.querySelector(".speedDisp").textContent = document.querySelector(".speedSelect").value
     document.querySelector(".requestDisp").textContent = document.querySelector(".requestSpeed").value
@@ -147,7 +125,7 @@ function looporn(){
 
     if (pornZone.getBoundingClientRect().right <= screen.width*2){
         if (!loading){
-            pornTime(loop*100, search)
+            pornTime(loop, search)
             loop++
         }
     }

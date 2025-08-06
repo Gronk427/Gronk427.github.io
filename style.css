@@ -27,3 +27,14 @@ p {
 .search {
     width: 220px;
 }
+
+.splitter {
+    display: flex;
+}
+
+.searchZone {
+    height: max-content;
+    width: 100%;
+    margin: auto;
+    padding-top: 8px;
+}

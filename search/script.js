@@ -1,5 +1,6 @@
 let params = new URL(document.location).searchParams
 let search = ""
+let limit = 100
 let loopInt = ""
 let loop = 0
 let marge = 0
@@ -8,20 +9,29 @@ let loading = false
 let tick = Date.now()
 let id = [0, 0, 0]
 
+if (screen.width < 500){
+    document.head.innerHTML += `<link rel="stylesheet" href="../mobile.css">`
+}
+
 document.querySelector('.thumbsizeDisp').innerHTML = document.querySelector(".thumbsize").value
 
 if (params.get("tags") != null){
     document.querySelector(".search").value = params.get("tags")
 }
 
-async function pornTime(page, tags){
-    document.title = "Alt 34: " + tags
+async function pornTime(page, tags, limit){
+    if (tags == ""){
+        document.title = "Alt 34: Latest"
+    } else {
+        document.title = "Alt 34: " + tags
+    }
+    
     if (document.querySelector(".aiposts").checked){
         tags += "+-ai_generated+-ai_assisted+-ai+-ai_upscaled+-ai_generated_background+-ai-created+-ai-generated"
     }
 
     console.log(tags)
-    fetch(`https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&tags=${tags}&pid=${page}`).then(async (rule34) => {
+    fetch(`https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&tags=${tags}&pid=${page}&limit=${limit}`).then(async (rule34) => {
         let pornZone = document.querySelector(".porn")
         pornZone.innerHTML = ""
         
@@ -29,10 +39,10 @@ async function pornTime(page, tags){
         try {
             newRule34 = await rule34.json()
             if (newRule34.length == 0){
-                pornZone.innerHTML = "<h1 style='text-allign: center; width: calc(100vw - 240px); padding-top: 128px'>Nobody here but us chickens!</h1>"
+                pornZone.innerHTML = "<h1 style='text-allign: center; width: 100vw; padding-top: 128px'>Nobody here but us chickens!</h1>"
             }
         } catch {
-            pornZone.innerHTML = "<h1 style='text-allign: center; width: calc(100vw - 240px); padding-top: 128px'>Nobody here but us chickens!</h1>"
+            pornZone.innerHTML = "<h1 style='text-allign: center; width: 100vw; padding-top: 128px'>Nobody here but us chickens!</h1>"
 
             clearInterval(loopInt)
             return
@@ -49,6 +59,10 @@ async function pornTime(page, tags){
 
             if (newRule34[x].file_url.endsWith(".mp4")){
                 temp.style.outline = "2px solid blue"
+            }
+
+            if (newRule34[x].file_url.endsWith(".gif")){
+                temp.style.outline = "2px solid cyan"
             }
             
             if (x == 0){
@@ -78,8 +92,20 @@ async function pornTime(page, tags){
 
 function searchPosts(){
     search = document.querySelector(".search").value
+    limit = document.querySelector(".ppp").value
     document.querySelector(".pageNo").innerHTML = page+1
-    pornTime(page, search)
+    document.querySelector(".pageNoBot").innerHTML = page+1
+    pornTime(page, search, limit)
+}
+
+function fullscreen(){
+    window.open(
+        "../index.html"
+        + '?tags=' + search.replaceAll(' ', '+')
+        + '&speed=' + document.querySelector(".speedSelect").value
+        + '&req=' + document.querySelector(".requestSpeed").value
+        + '&mp4=' + JSON.stringify({"enabled": document.querySelector(".mp4posts").checked,"loop": document.querySelector(".loopmp4posts").checked,"silent": document.querySelector(".silencemp4posts").checked})
+        , '_blank').focus()
 }
 
 searchPosts()
