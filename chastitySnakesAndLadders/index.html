@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snakes And Locks</title>
+</head>
+<body style="font-family: Arial, Helvetica, sans-serif; text-align: center;">
+    <br>
+    <br>
+    <h1 style="text-align: center;">Chastity Snakes and Ladders</h1>
+    <br>
+    <div class="game" style="display: none; width: max-content; margin: auto;">
+        <div class="boardContainer" style="width: max-content; margin: auto;">
+            <div style="position: absolute;">
+                <div class="playerCounter" style="position: absolute; width: 48px; height: 48px; left: 8px; top: 600px; background-color: red; border-radius: 100%; transition: left 125ms ease-in-out, top 125ms ease-in-out;"></div>
+            </div>
+            <div class="board" style="display: grid; width: max-content; height: max-content; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;"></div>
+            
+        </div>
+        <br>
+        <div style="width: max-content; margin: auto;">
+            <button onclick="roll()">
+                <h1 style="margin: 0%; width: 200px;">ROLL</h1>
+                <p style="margin: 0%;"><b class="rollTimer">00:00:00 until next</b></p>
+            </button>
+            <h2 class="latestRoll" style="text-align: center; margin: 0%;">Last Roll: 0</h2>
+        </div>
+    </div>
+    <div class="settings" style="margin: auto; text-align: center;">
+        <h1>Settings</h1>
+        <input class="counterColour" type="color" value="#ff0000">
+        <h3 class="counterColourDisp" style="margin: 0%;">Counter colour: #FF0000</h3><br>
+        <input class="lockBoxCode" type="text">
+        <h3 style="margin: 0%;">Lockbox Code (optional)</h3>
+        <small>Set your lockbox code before starting a game, you cannot see or change it until you win the game.</small><br><br>
+        <details>
+            <summary>Give Up</summary>
+            <small>If you give up you WILL NOT get your lockbox code back.</small><br>
+            <button onclick="localStorage.removeItem('ChastitySnakesAndLaddersGame'); location.reload()">Give Up</button><br>
+        </details>
+    </div>
+    <div class="challenges">
+        <h1>Challenges</h1>
+        <h2>Please let me know if you want any challenges added, preferably on my discord</h2>
+        <button style="width: 300px;" onclick="startChallenge(10, 60, 2, 8, 'wait', 'tutorial')">
+            <h2 style="margin: 0%;">Tutorial</h2>
+            <h3 style="margin: 0%;">Roll with 2 D8</h3>
+            <h3 style="margin: 0%;">00:01:00 between rolls</h3>
+            <h3 style="margin: 0%;">10 snakes/ladders</h3>
+            <h4 style="margin: 0%;">When rolling past 100: Do nothing</h4>
+            <br>
+            <h3 style="margin: 0%;">lock time: 10-15 minutes</h3>
+            <h4 class="tutorialCompletion" style="margin: 0%;">Not Completed</h4>
+        </button><br>
+        <button style="width: 300px;" onclick="startChallenge(10, 120, 2, 6, 'wait', 'lock1')">
+            <h2 style="margin: 0%;">Go Easy On Me!</h2>
+            <h3 style="margin: 0%;">Roll with 2 D6</h3>
+            <h3 style="margin: 0%;">00:02:00 between rolls</h3>
+            <h3 style="margin: 0%;">10 snakes/ladders</h3>
+            <h4 style="margin: 0%;">When rolling past 100: Do nothing</h4>
+            <br>
+            <h3 style="margin: 0%;">lock time: 30-60 minutes</h3>
+            <h4 class="lock1Completion" style="margin: 0%;">Not Completed</h4>
+        </button>
+        <button style="width: 300px;" onclick="startChallenge(15, 600, 2, 6, 'wait', 'vanilla')">
+            <h2 style="margin: 0%;">Vanilla</h2>
+            <h3 style="margin: 0%;">Roll with 2 D6</h3>
+            <h3 style="margin: 0%;">00:10:00 between rolls</h3>
+            <h3 style="margin: 0%;">15 snakes/ladders</h3>
+            <h4 style="margin: 0%;">When rolling past 100: Do nothing</h4>
+            <br>
+            <h3 style="margin: 0%;">lock time: 2-4 hours</h3>
+            <h4 class="vanillaCompletion" style="margin: 0%;">Not Completed</h4>
+        </button>
+        <button style="width: 300px;" onclick="startChallenge(15, 600, 2, 6, 'mirror', 'mirrorVanilla')">
+            <h2 style="margin: 0%;">Mirror Vanilla</h2>
+            <h3 style="margin: 0%;">Roll with 2 D6</h3>
+            <h3 style="margin: 0%;">00:10:00 between rolls</h3>
+            <h3 style="margin: 0%;">15 snakes/ladders</h3>
+            <h4 style="margin: 0%;">When rolling past 100: Go back</h4>
+            <br>
+            <h3 style="margin: 0%;">lock time: 2-8 hours</h3>
+            <h4 class="mirrorVanillaCompletion" style="margin: 0%;">Not Completed</h4>
+        </button><br>
+        <button style="width: 300px;" onclick="startChallenge(15, 600, 2, 6, 'overflow', 'overflowVanilla')">
+            <h2 style="margin: 0%;">Overflow Vanilla</h2>
+            <h3 style="margin: 0%;">Roll with 2 D6</h3>
+            <h3 style="margin: 0%;">00:10:00 between rolls</h3>
+            <h3 style="margin: 0%;">15 snakes/ladders</h3>
+            <h4 style="margin: 0%;">When rolling past 100: Overflow to 1</h4>
+            <br>
+            <h3 style="margin: 0%;">lock time: 8-14 hours</h3>
+            <h4 class="overflowVanillaCompletion" style="margin: 0%;">Not Completed</h4>
+        </button>
+        <button style="width: 300px;" onclick="startChallenge(0, 600, 1, 4, 'overflow', 'sas')">
+            <h2 style="margin: 0%;">Slow And Steady</h2>
+            <h3 style="margin: 0%;">Roll with 1 D4</h3>
+            <h3 style="margin: 0%;">00:10:00 between rolls</h3>
+            <h3 style="margin: 0%;">0 snakes/ladders</h3>
+            <h4 style="margin: 0%;">When rolling past 100: Do nothing</h4>
+            <br>
+            <h3 style="margin: 0%;">lock time: 10-14 hours</h3>
+            <h4 class="sasCompletion" style="margin: 0%;">Not Completed</h4>
+        </button>
+        <button style="width: 300px;" onclick="startChallenge(98, 600, 2, 6, 'mirror', 'shuffleVanilla')">
+            <h2 style="margin: 0%;">Shuffle Vanilla</h2>
+            <h3 style="margin: 0%;">Roll with 2 D6</h3>
+            <h3 style="margin: 0%;">00:10:00 between rolls</h3>
+            <h3 style="margin: 0%;">15 snakes/ladders</h3>
+            <h4 style="margin: 0%;">When rolling past 100: Go back</h4>
+            <br>
+            <h3 style="margin: 0%;">lock time: 12-18 hours</h3>
+            <h4 class="shuffleVanillaCompletion" style="margin: 0%;">Not Completed</h4>
+        </button><br>
+        <button style="width: 300px;" onclick="startChallenge(15, 3600, 2, 6, 'overflow', 'longVanilla')">
+            <h2 style="margin: 0%;">Long Vanilla</h2>
+            <h3 style="margin: 0%;">Roll with 2 D6</h3>
+            <h3 style="margin: 0%;">01:00:00 between rolls</h3>
+            <h3 style="margin: 0%;">15 snakes/ladders</h3>
+            <h4 style="margin: 0%;">When rolling past 100: Do nothing</h4>
+            <br>
+            <h3 style="margin: 0%;">lock time: 2-3 days</h3>
+            <h4 class="longVanillaCompletion" style="margin: 0%;">Not Completed</h4>
+        </button>
+        <button style="width: 300px;" onclick="startChallenge(15, 3600, 2, 6, 'mirror', 'd20')">
+            <h2 style="margin: 0%;">The Big One</h2>
+            <h3 style="margin: 0%;">Roll with 1 D20</h3>
+            <h3 style="margin: 0%;">01:00:00 between rolls</h3>
+            <h3 style="margin: 0%;">25 snakes/ladders</h3>
+            <h4 style="margin: 0%;">When rolling past 100: Go Back</h4>
+            <br>
+            <h3 style="margin: 0%;">lock time: 1-2 days</h3>
+            <h4 class="d20Completion" style="margin: 0%;">Not Completed</h4>
+        </button><br>
+        <button style="width: 300px;" onclick="startChallenge(25, 86400, 2, 6, 'mirror', 'master')">
+            <h2 style="margin: 0%;">I Want This To Take A While</h2>
+            <h3 style="margin: 0%;">Roll with 2 D6</h3>
+            <h3 style="margin: 0%;">1 day between rolls</h3>
+            <h3 style="margin: 0%;">25 snakes/ladders</h3>
+            <h4 style="margin: 0%;">When rolling past 100: Go Back</h4>
+            <br>
+            <h3 style="margin: 0%;">lock time: 1-3 months</h3>
+            <h4 class="masterCompletion" style="margin: 0%;">Not Completed</h4>
+        </button>
+        <button style="width: 300px;" onclick="startChallenge(0, 86400, 1, 4, 'overflow', 'master2')">
+            <h2 style="margin: 0%;">Throw Away My Key</h2>
+            <h3 style="margin: 0%;">Roll with 1 D4</h3>
+            <h3 style="margin: 0%;">1 day between rolls</h3>
+            <h3 style="margin: 0%;">0 snakes/ladders</h3>
+            <h4 style="margin: 0%;">When rolling past 100: Go Back</h4>
+            <br>
+            <h3 style="margin: 0%;">lock time: 3 months</h3>
+            <h4 class="master2Completion" style="margin: 0%;">Not Completed</h4>
+        </button><br>
+        <button style="width: 300px;" onclick="startChallenge(0, 86400, 1, 100, 'overflow', 'luck')">
+            <h2 style="margin: 0%;">Pure Luck</h2>
+            <h3 style="margin: 0%;">Roll with 1 D100</h3>
+            <h3 style="margin: 0%;">1 day between rolls</h3>
+            <h3 style="margin: 0%;">0 snakes/ladders</h3>
+            <h4 style="margin: 0%;">When rolling past 100: Go Back</h4>
+            <br>
+            <h3 style="margin: 0%;">lock time: ???</h3>
+            <h4 class="luckCompletion" style="margin: 0%;">Not Completed</h4>
+        </button>
+        <details>
+            <summary>Wipe Challenge Data</summary>
+            <small>Wiping challenge data is irreversable, do so only if you really want to.</small><br>
+            <button onclick="localStorage.removeItem('ChastitySnakesAndLaddersChallenges'); location.reload()">Wipe Challenges</button><br>
+        </details>
+    </div>
+    <div class="customGame">
+        <h1>Custom Game Setup</h1>
+        <input type="number" class="diceCount" value="2" min="1" max="10" style="width: 30px;" required>
+        <select class="diceFaces" required>
+            <option value="4">D4</option>
+            <option value="6" selected="selected">D6</option>
+            <option value="8">D8</option>
+            <option value="10">D10</option>
+            <option value="12">D12</option>
+            <option value="20">D20</option>
+            <option value="100">D100</option>
+        </select>
+        <h3 class="diceDisp" style="margin: 0%;">Roll with 2 D6</h3><br>
+        <input type="number" class="waitDuration" value="600" min="60" required>
+        <h3 class="waitDurationDisp" style="margin: 0%;"></h3><br>
+        <input type="number" class="moverCount" value="15" min="1" max="98" required>
+        <h3 class="moverCountDisp" style="margin: 0%;"></h3><br>
+        <select class="rule100" required>
+            <option value="wait">When rolling past 100: Do nothing</option>
+            <option value="mirror">When rolling past 100: Go back</option>
+            <option value="overflow">When rolling past 100: Overflow to 1</option>
+        </select><br><br>
+        <button onclick="startGame()">Lock & Start</button>
+    </div>
+    <div>
+        <p style="margin: 0%;">Gronk427 2025, v1</p>
+        <p style="margin: 0%;">Report Bugs and Talk in my <a href="https://discord.gg/VSbpX9WbTy">Discord</a></p>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
